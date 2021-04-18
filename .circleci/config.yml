@@ -7,14 +7,17 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - awsconfigure
+      - aws-cli/configure:
+          aws-access-key-id: $AWS_ACCESS_KEY_ID
+          aws-region: $AWS_DEFAULT_REGION
+          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
+          profile-name: default
       - run:
           name: Ensure backend infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file template.yml \
               --stack-name my-stack \
-              --region us-west-2
 workflows:
   my_workflow:
     jobs:
