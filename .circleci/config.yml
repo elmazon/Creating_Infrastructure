@@ -1,78 +1,20 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 # Orchestrate or schedule a set of jobs
-orbs:
-  aws-cloudformation: orbss/aws-cloudformation@0.1.6
-
-description: |
-  Install and configure aws-cli and execute aws cloudformation commands
-executor:
-  name: default
-  python-version: 3.7.4
-parameters:
-  aws-access-key-id:
-    default: AWS_ACCESS_KEY_ID
-    description: |
-      AWS access key id for IAM role. Set this to the name of
-      the environment variable you will use to hold this
-      value, i.e. AWS_ACCESS_KEY.
-    type: env_var_name
-  aws-region:
-    default: AWS_DEFAULT_REGION
-    description: |
-      Env var of AWS region to operate in
-      (defaults to AWS_DEFAULT_REGION)
-    type: env_var_name
-  aws-secret-access-key:
-    default: AWS_SECRET_ACCESS_KEY
-    description: |
-      AWS secret key for IAM role. Set this to the name of
-      the environment variable you will use to hold this
-      value, i.e. $AWS_SECRET_ACCESS_KEY.
-    type: env_var_name
-  branch:
-    default: master
-    description: |
-      Git branch of retrieving GitHub URL of CloudFormation
-       template file
-    type: string
-  git-url:
-    default: ''
-    description: |
-      GitHub URL to retrieve CloudFormation template
-    type: string
-  profile-name:
-    default: default
-    description: Profile name to be configured.
-    type: string
-  stack-name:
-    description: |
-      CloudFormation stack name
-    type: string
-  template-file-path:
-    description: |
-      CloudFormation template file path
-    type: string  
 jobs:
   creating_infrastructure:
     docker:
-      - image: ami-055901a576342a263
+      - image: amazon/aws-cli
     steps:
-      - aws-cli/install
-      - aws-cli/configure :
-          aws-access-key-id: $AWS_ACCESS_KEY_ID
-          aws-region: $AWS_DEFAULT_REGION
-          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
-          profile-name: default
       - checkout
-      - create-stack:
-          branch:  master
-          git-url: https://github.com/elmazon/Creating_Infrastructure.git
-          stack-name: "CDstack"  
-          template-file-path: ~/Git/Creating_Infrastructure/template.yml
+      - run: |
+          name: ensure infrastructure backend exists
+          command: |
+            aws cloudformation deploy \
+            --template-file template.yml \ 
+            --stack-name CDstack
 workflows:
   # Name the workflow "welcome"
-  creating_infr:
+  my_workflow:
     jobs:
-      - creating_infrastructure:
-          context: AWS
+      - creating_infrastructure
