@@ -4,7 +4,7 @@ Resources:
     Properties:
       SecurityGroups:
         - !Ref InstanceSecurityGroup
-      KeyName: udacity
+      KeyName: AhmedKey
       ImageId: 'ami-055901a576342a263'
 
   InstanceSecurityGroup:
