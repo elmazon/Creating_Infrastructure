@@ -3,7 +3,56 @@ version: 2.1
 # Orchestrate or schedule a set of jobs
 orbs:
   aws-cloudformation: orbss/aws-cloudformation@0.1.6
-  
+
+description: |
+  Install and configure aws-cli and execute aws cloudformation commands
+executor:
+  name: default
+  python-version: 3.7.4
+parameters:
+  aws-access-key-id:
+    default: AWS_ACCESS_KEY_ID
+    description: |
+      AWS access key id for IAM role. Set this to the name of
+      the environment variable you will use to hold this
+      value, i.e. AWS_ACCESS_KEY.
+    type: env_var_name
+  aws-region:
+    default: AWS_DEFAULT_REGION
+    description: |
+      Env var of AWS region to operate in
+      (defaults to AWS_DEFAULT_REGION)
+    type: env_var_name
+  aws-secret-access-key:
+    default: AWS_SECRET_ACCESS_KEY
+    description: |
+      AWS secret key for IAM role. Set this to the name of
+      the environment variable you will use to hold this
+      value, i.e. $AWS_SECRET_ACCESS_KEY.
+    type: env_var_name
+  branch:
+    default: master
+    description: |
+      Git branch of retrieving GitHub URL of CloudFormation
+       template file
+    type: string
+  git-url:
+    default: ''
+    description: |
+      GitHub URL to retrieve CloudFormation template
+    type: string
+  profile-name:
+    default: default
+    description: Profile name to be configured.
+    type: string
+  stack-name:
+    description: |
+      CloudFormation stack name
+    type: string
+  template-file-path:
+    description: |
+      CloudFormation template file path
+    type: string  
 jobs:
   creating_infrastructure:
     docker:
