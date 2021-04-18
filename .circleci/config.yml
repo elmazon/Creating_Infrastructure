@@ -19,5 +19,5 @@ jobs:
 workflows:
   my_workflow:
     jobs:
-      - configure_infrastructure:
-          context : AWS
+      - configure_infrastructure
+          
